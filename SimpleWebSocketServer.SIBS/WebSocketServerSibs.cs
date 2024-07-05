@@ -29,7 +29,7 @@ namespace SimpleWebSocketServer.SIBS
         /// Start the WebSocket server
         /// </summary>
         /// <param name="prefix">The prefix to listen to</param>
-        public void Start(string prefix)
+        public async Task StartAsync(string prefix)
         {
             // Create an instance of WebSocketServer
             server = new WebSocketServer(prefix);
@@ -42,7 +42,7 @@ namespace SimpleWebSocketServer.SIBS
                 server.MessageReceived += Server_MessageReceived;
 
                 // Start the WebSocket server
-                server.Start().Wait();
+                await server.Start();
             }
             catch (Exception ex)
             {
