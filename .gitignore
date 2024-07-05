@@ -1,0 +1,6 @@
+/.vs
+/packages
+/SimpleWebSocketServer.SIBS/bin
+/SimpleWebSocketServer.SIBS/obj
+/SimpleWebSocketServer.SIBS.Console/bin
+/SimpleWebSocketServer.SIBS.Console/obj
