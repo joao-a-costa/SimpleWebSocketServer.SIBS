@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleWebSocketServer.SIBS.Models
+namespace SimpleWebSocketServer.SIBS.Lib.Models
 {
     public class PaymentData
     {

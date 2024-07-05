@@ -1,4 +1,4 @@
-﻿namespace SimpleWebSocketServer.SIBS.Enums
+﻿namespace SimpleWebSocketServer.SIBS.Lib.Enums
 {
     public class Enums
     {

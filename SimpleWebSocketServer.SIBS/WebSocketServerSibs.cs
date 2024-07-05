@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SimpleWebSocketServer.SIBS.Models;
+using SimpleWebSocketServer.SIBS.Lib.Models;
 
-namespace SimpleWebSocketServer.SIBS
+namespace SimpleWebSocketServer.SIBS.Lib
 {
     public class WebSocketServerSibs
     {
@@ -13,7 +13,6 @@ namespace SimpleWebSocketServer.SIBS
         /// The WebSocket server
         /// </summary>
         private WebSocketServer server;
-        private Task serverTask;
 
         #endregion
 
@@ -63,7 +62,7 @@ namespace SimpleWebSocketServer.SIBS
                 server.MessageReceived += Server_MessageReceived;
 
                 // Start the WebSocket server
-                serverTask = server.Start();
+                server.Start();
             }
             catch (Exception ex)
             {
@@ -88,7 +87,6 @@ namespace SimpleWebSocketServer.SIBS
         public void Stop()
         {
             server.Stop();
-            serverTask = null;
         }   
 
         #endregion

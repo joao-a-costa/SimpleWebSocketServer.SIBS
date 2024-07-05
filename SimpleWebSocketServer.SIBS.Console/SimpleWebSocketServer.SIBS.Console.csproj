@@ -60,16 +60,16 @@
     <None Include="Resources\credentials.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleWebSocketServer.SIBS\SimpleWebSocketServer.SIBS.csproj">
-      <Project>{eaff0fd9-dfe1-4577-8488-38f569135b2e}</Project>
-      <Name>SimpleWebSocketServer.SIBS</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleWebSocketServer.SIBS\SimpleWebSocketServer.SIBS.Lib.csproj">
+      <Project>{eaff0fd9-dfe1-4577-8488-38f569135b2e}</Project>
+      <Name>SimpleWebSocketServer.SIBS.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
