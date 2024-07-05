@@ -5,3 +5,6 @@
 /SimpleWebSocketServer.SIBS.Console/bin
 /SimpleWebSocketServer.SIBS.Console/obj
 /SimpleWebSocketServer.SIBS/nugetPackagePush.cmd
+/SimpleWebSocketServer.SIBS.Console/.vs/SimpleWebSocketServer.SIBS.Console.csproj.dtbcache.json
+/SimpleWebSocketServer.SIBS/.vs/SimpleWebSocketServer.SIBS.Lib.csproj.dtbcache.json
+/SimpleWebSocketServer.SIBS/.vs
