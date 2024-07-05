@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SimpleWebSocketServer.SIBS.Models;
 
 namespace SimpleWebSocketServer.SIBS.Console
@@ -8,7 +8,7 @@ namespace SimpleWebSocketServer.SIBS.Console
     {
         private static WebSocketServerSibs server;
 
-        static void Main()
+        static async Task Main(string[] args)
         {
             server = new WebSocketServerSibs();
             server.ClientConnected += Server_ClientConnected;
@@ -17,8 +17,15 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.EventNotificationReceived += Server_EventNotificationReceived;
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
-            server.Start("http://+:10005/");
 
+            // Start the WebSocket server in a separate task
+            Task serverTask = Task.Run(() => server.StartAsync("http://+:10005/"));
+
+            // Wait until the user presses Enter
+            await Task.Run(() => System.Console.ReadLine());
+
+            // Ensure server task completes
+            await serverTask;
         }
 
         private async static void Server_ClientConnected(object sender, System.EventArgs e)
