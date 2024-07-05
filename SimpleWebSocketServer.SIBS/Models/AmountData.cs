@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SimpleWebSocketServer.SIBS.Models
+namespace SimpleWebSocketServer.SIBS.Lib.Models
 {
     public class AmountData
     {

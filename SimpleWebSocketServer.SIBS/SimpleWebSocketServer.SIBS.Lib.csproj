@@ -7,8 +7,8 @@
     <ProjectGuid>{EAFF0FD9-DFE1-4577-8488-38F569135B2E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleWebSocketServer.SIBS</RootNamespace>
-    <AssemblyName>SimpleWebSocketServer.SIBS</AssemblyName>
+    <RootNamespace>SimpleWebSocketServer.SIBS.Lib</RootNamespace>
+    <AssemblyName>SimpleWebSocketServer.SIBS.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

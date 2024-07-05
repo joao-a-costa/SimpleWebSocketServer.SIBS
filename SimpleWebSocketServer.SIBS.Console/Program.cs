@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SimpleWebSocketServer.SIBS.Models;
+using SimpleWebSocketServer.SIBS.Lib;
+using SimpleWebSocketServer.SIBS.Lib.Models;
 
 namespace SimpleWebSocketServer.SIBS.Console
 {
@@ -59,7 +60,7 @@ namespace SimpleWebSocketServer.SIBS.Console
         /// </summary>
         /// <param name="args">The command-line arguments.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             // Define the WebSocket server prefix
             string prefix = _WebSocketServerPrefix;

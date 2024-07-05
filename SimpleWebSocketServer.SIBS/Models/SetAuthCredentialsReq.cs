@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using static SimpleWebSocketServer.SIBS.Enums.Enums;
+using static SimpleWebSocketServer.SIBS.Lib.Enums.Enums;
 
-namespace SimpleWebSocketServer.SIBS.Models
+namespace SimpleWebSocketServer.SIBS.Lib.Models
 {
     public class SetAuthCredentialsReq
     {
