@@ -24,6 +24,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void SetAuthCredentialsReqResponseEventHandler(object sender, SetAuthCredentialsReqResponse reqResponse);
         public delegate void ProcessPaymentReqResponseEventHandler(object sender, ProcessPaymentReqResponse reqResponse);
         public delegate void EventNotificationEventHandler(object sender, EventNotification reqResponse);
+        public delegate void HeartbeatNotificationEventHandler(object sender, HeartbeatNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -32,6 +33,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event SetAuthCredentialsReqResponseEventHandler SetAuthCredentialsReqReceived;
         public event ProcessPaymentReqResponseEventHandler ProcessPaymentReqReceived;
         public event EventNotificationEventHandler EventNotificationReceived;
+        public event HeartbeatNotificationEventHandler HeartbeatNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
 
         #endregion
@@ -135,6 +137,9 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnSetAuthCredentialsReqReceived(JsonConvert
                                 .DeserializeObject<SetAuthCredentialsReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.TX_REQUEST:
+                            server.SendMessageToClient(JsonConvert.SerializeObject(new TransactionResponse()));
+                            break;
                         case Enums.Enums.RequestType.EVENT_NOTIFICATION:
                             OnEventNotificationReceived(JsonConvert
                                 .DeserializeObject<EventNotification>(e));
@@ -146,6 +151,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                         case Enums.Enums.RequestType.ERROR_NOTIFICATION:
                             OnErrorNotificationReceived(JsonConvert
                                 .DeserializeObject<ErrorNotification>(e));
+                            break;
+                        case Enums.Enums.RequestType.HEARTBEAT_NOTIFICATION:
+                            OnHeartbeatNotificationReceived(JsonConvert
+                                .DeserializeObject<HeartbeatNotification>(e));
                             break;
                         default:
                             Console.WriteLine("Received unknown message");
@@ -214,6 +223,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnEventNotificationReceived(EventNotification reqResponse)
         {
             EventNotificationReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnHeartbeatNotificationReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnHeartbeatNotificationReceived(HeartbeatNotification reqResponse)
+        {
+            HeartbeatNotificationReceived?.Invoke(this, reqResponse);
         }
 
         /// <summary>

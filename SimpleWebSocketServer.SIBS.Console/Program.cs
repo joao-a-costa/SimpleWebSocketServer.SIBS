@@ -20,6 +20,7 @@ namespace SimpleWebSocketServer.SIBS.Console
         #endregion
 
         private static WebSocketServerSibs server;
+        private static bool isFirstHeartbeat = true;
 
         /// <summary>
         /// Listens for user input and sends the input to the WebSocket server.
@@ -73,6 +74,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.EventNotificationReceived += Server_EventNotificationReceived;
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
+            server.HeartbeatNotificationReceived += Server_HeartbeatNotificationReceived;
 
             try
             {
@@ -104,10 +106,20 @@ namespace SimpleWebSocketServer.SIBS.Console
             System.Console.ReadKey();
         }
 
+        private async static void Server_HeartbeatNotificationReceived(object sender, HeartbeatNotification reqResponse)
+        {
+            if (isFirstHeartbeat)
+            {
+                isFirstHeartbeat = false;
+                await server.SendMessageToClient(JsonConvert.SerializeObject(
+                    new TerminalStatusReq()));
+            }
+        }
+
         private async static void Server_ClientConnected(object sender, System.EventArgs e)
         {
-            await server.SendMessageToClient(JsonConvert.SerializeObject(
-                new TerminalStatusReq()));
+            //await server.SendMessageToClient(JsonConvert.SerializeObject(
+            //    new TerminalStatusReq()));
         }
 
         private async static void Server_TerminalStatusReqResponseReceived(object sender, TerminalStatusReqResponse reqResponse)
@@ -130,7 +142,7 @@ namespace SimpleWebSocketServer.SIBS.Console
                     {
                         AmountData = new AmountData
                         {
-                            Amount = 99.98,
+                            Amount = 0.01,
                         }
                     }));
 #endif
