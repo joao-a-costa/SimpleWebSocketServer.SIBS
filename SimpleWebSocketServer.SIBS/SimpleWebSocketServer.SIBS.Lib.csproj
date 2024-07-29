@@ -55,6 +55,7 @@
     <Compile Include="Models\HeartbeatNotification.cs" />
     <Compile Include="Models\PaymentData.cs" />
     <Compile Include="Models\ProcessPaymentReqResponse.cs" />
+    <Compile Include="Models\ReceiptNotification.cs" />
     <Compile Include="Models\ReceiptTextsData.cs" />
     <Compile Include="Models\SetAuthCredentialsReqResponse.cs" />
     <Compile Include="Models\SetAuthCredentialsReq.cs" />
