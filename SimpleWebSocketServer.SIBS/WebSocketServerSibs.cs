@@ -7,6 +7,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
 {
     public class WebSocketServerSibs
     {
+        private const string _MessageReceivedUnknownMessage = "Received unknown message";
+        private const string _MessageErrorOccurred = "Error occurred";
+        private const string _MessageErrorDeserializingMessage = "Error deserializing message";
+
         #region "Fields"
 
         /// <summary>
@@ -25,6 +29,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void ProcessPaymentReqResponseEventHandler(object sender, ProcessPaymentReqResponse reqResponse);
         public delegate void EventNotificationEventHandler(object sender, EventNotification reqResponse);
         public delegate void HeartbeatNotificationEventHandler(object sender, HeartbeatNotification reqResponse);
+        public delegate void ReceiptNotificationEventHandler(object sender, ReceiptNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -34,6 +39,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event ProcessPaymentReqResponseEventHandler ProcessPaymentReqReceived;
         public event EventNotificationEventHandler EventNotificationReceived;
         public event HeartbeatNotificationEventHandler HeartbeatNotificationReceived;
+        public event ReceiptNotificationEventHandler ReceiptNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
 
         #endregion
@@ -64,11 +70,11 @@ namespace SimpleWebSocketServer.SIBS.Lib
                 server.MessageReceived += Server_MessageReceived;
 
                 // Start the WebSocket server
-                server.Start();
+                Task.Run(() => Task.Run(() => server.Start()).Wait()).Wait();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occurred: {ex.Message}");
+                Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
             }
         }
 
@@ -88,7 +94,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         /// <returns>The task</returns>
         public void Stop()
         {
-            server.Stop();
+            Task.Run(() => Task.Run(() => server.Stop()).Wait()).Wait();
         }   
 
         #endregion
@@ -138,7 +144,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
                                 .DeserializeObject<SetAuthCredentialsReqResponse>(e));
                             break;
                         case Enums.Enums.RequestType.TX_REQUEST:
-                            server.SendMessageToClient(JsonConvert.SerializeObject(new TransactionResponse()));
+                            Task.Run(() => server.SendMessageToClient(JsonConvert.SerializeObject(new TransactionResponse()))).Wait();
                             break;
                         case Enums.Enums.RequestType.EVENT_NOTIFICATION:
                             OnEventNotificationReceived(JsonConvert
@@ -156,8 +162,12 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnHeartbeatNotificationReceived(JsonConvert
                                 .DeserializeObject<HeartbeatNotification>(e));
                             break;
+                        case Enums.Enums.RequestType.RECEIPT_NOTIFICATION:
+                            OnReceiptNotificationReceived(JsonConvert
+                                .DeserializeObject<ReceiptNotification>(e));
+                            break;
                         default:
-                            Console.WriteLine("Received unknown message");
+                            Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
                     }
                 }
@@ -165,7 +175,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
             catch (Exception ex)
             {
                 // Handle deserialization errors
-                Console.WriteLine($"Error deserializing message: {ex.Message}");
+                Console.WriteLine($"{_MessageErrorDeserializingMessage}: {ex.Message}");
             }
         }
 
@@ -241,6 +251,11 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnErrorNotificationReceived(ErrorNotification reqResponse)
         {
             ErrorNotificationReceived?.Invoke(this, reqResponse);
+        }
+
+        private void OnReceiptNotificationReceived(ReceiptNotification reqResponse)
+        {
+            ReceiptNotificationReceived?.Invoke(this, reqResponse);
         }
 
         #endregion
