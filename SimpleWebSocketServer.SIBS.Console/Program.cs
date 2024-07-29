@@ -68,7 +68,7 @@ namespace SimpleWebSocketServer.SIBS.Console
 
             // Create an instance of WebSocketServer
             server = new WebSocketServerSibs();
-            server.ClientConnected += Server_ClientConnected;
+            //server.ClientConnected += Server_ClientConnected;
             server.TerminalStatusReqResponseReceived += Server_TerminalStatusReqResponseReceived;
             server.SetAuthCredentialsReqReceived += Server_SetAuthCredentialsReqReceived;
             server.EventNotificationReceived += Server_EventNotificationReceived;
@@ -116,11 +116,11 @@ namespace SimpleWebSocketServer.SIBS.Console
             }
         }
 
-        private async static void Server_ClientConnected(object sender, System.EventArgs e)
-        {
-            //await server.SendMessageToClient(JsonConvert.SerializeObject(
-            //    new TerminalStatusReq()));
-        }
+        //private async static void Server_ClientConnected(object sender, System.EventArgs e)
+        //{
+        //    //await server.SendMessageToClient(JsonConvert.SerializeObject(
+        //    //    new TerminalStatusReq()));
+        //}
 
         private async static void Server_TerminalStatusReqResponseReceived(object sender, TerminalStatusReqResponse reqResponse)
         {

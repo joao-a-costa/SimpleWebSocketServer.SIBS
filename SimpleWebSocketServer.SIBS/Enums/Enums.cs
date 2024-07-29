@@ -14,7 +14,8 @@
             ERROR_NOTIFICATION,
             HEARTBEAT_NOTIFICATION,
             TX_REQUEST,
-            TX_RESPONSE
+            TX_RESPONSE,
+            RECEIPT_NOTIFICATION
         }
 
         public enum Version
