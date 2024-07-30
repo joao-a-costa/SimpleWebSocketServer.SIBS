@@ -70,7 +70,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
                 server.MessageReceived += Server_MessageReceived;
 
                 // Start the WebSocket server
-                Task.Run(() => Task.Run(() => server.Start()).Wait()).Wait();
+                Task.Run(() => Task.Run(() => server.Start()).Wait());
             }
             catch (Exception ex)
             {
@@ -253,6 +253,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
             ErrorNotificationReceived?.Invoke(this, reqResponse);
         }
 
+        /// <summary>
+        /// OnReceiptNotificationReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
         private void OnReceiptNotificationReceived(ReceiptNotification reqResponse)
         {
             ReceiptNotificationReceived?.Invoke(this, reqResponse);
