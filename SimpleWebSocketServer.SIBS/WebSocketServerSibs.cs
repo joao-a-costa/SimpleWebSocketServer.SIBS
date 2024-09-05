@@ -30,6 +30,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void EventNotificationEventHandler(object sender, EventNotification reqResponse);
         public delegate void HeartbeatNotificationEventHandler(object sender, HeartbeatNotification reqResponse);
         public delegate void ReceiptNotificationEventHandler(object sender, ReceiptNotification reqResponse);
+        public delegate void PairingReqEventHandler(object sender, PairingReqResponse reqResponse);
+        public delegate void PairingNotificationEventHandler(object sender, PairingNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -40,6 +42,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event EventNotificationEventHandler EventNotificationReceived;
         public event HeartbeatNotificationEventHandler HeartbeatNotificationReceived;
         public event ReceiptNotificationEventHandler ReceiptNotificationReceived;
+        public event PairingReqEventHandler PairingReqReceived;
+        public event PairingNotificationEventHandler PairingNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
 
         #endregion
@@ -166,6 +170,14 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnReceiptNotificationReceived(JsonConvert
                                 .DeserializeObject<ReceiptNotification>(e));
                             break;
+                        case Enums.Enums.RequestType.PAIRING_RESPONSE:
+                            OnPairingReqReceived(JsonConvert
+                                .DeserializeObject<PairingReqResponse>(e));
+                            break;
+                        case Enums.Enums.RequestType.PAIRING_NOTIFICATION:
+                            OnPairingNotificationReceived(JsonConvert
+                                .DeserializeObject<PairingNotification>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -260,6 +272,24 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnReceiptNotificationReceived(ReceiptNotification reqResponse)
         {
             ReceiptNotificationReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnPairingReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnPairingReqReceived(PairingReqResponse reqResponse)
+        {
+            PairingReqReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnPairingNotificationReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnPairingNotificationReceived(PairingNotification reqResponse)
+        {
+            PairingNotificationReceived?.Invoke(this, reqResponse);
         }
 
         #endregion
