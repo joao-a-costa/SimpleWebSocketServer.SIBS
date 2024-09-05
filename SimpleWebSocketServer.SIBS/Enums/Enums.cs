@@ -20,7 +20,9 @@
             PAIRING_RESPONSE,
             PAIRING_NOTIFICATION,
             RECONCILIATION_REQUEST,
-            RECONCILIATION_RESPONSE
+            RECONCILIATION_RESPONSE,
+            REFUND_REQUEST,
+            REFUND_RESPONSE
         }
 
         public enum PairingStep
