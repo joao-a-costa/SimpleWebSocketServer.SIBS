@@ -31,6 +31,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void HeartbeatNotificationEventHandler(object sender, HeartbeatNotification reqResponse);
         public delegate void ReceiptNotificationEventHandler(object sender, ReceiptNotification reqResponse);
         public delegate void PairingReqEventHandler(object sender, PairingReqResponse reqResponse);
+        public delegate void ReconciliationReqEventHandler(object sender, ReconciliationReqResponse reqResponse);
         public delegate void PairingNotificationEventHandler(object sender, PairingNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
 
@@ -43,6 +44,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event HeartbeatNotificationEventHandler HeartbeatNotificationReceived;
         public event ReceiptNotificationEventHandler ReceiptNotificationReceived;
         public event PairingReqEventHandler PairingReqReceived;
+        public event ReconciliationReqEventHandler ReconciliationReqReceived;
         public event PairingNotificationEventHandler PairingNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
 
@@ -178,6 +180,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnPairingNotificationReceived(JsonConvert
                                 .DeserializeObject<PairingNotification>(e));
                             break;
+                        case Enums.Enums.RequestType.RECONCILIATION_RESPONSE:
+                            OnReconciliationReqReceived(JsonConvert
+                                .DeserializeObject<ReconciliationReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -290,6 +296,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnPairingNotificationReceived(PairingNotification reqResponse)
         {
             PairingNotificationReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnReconciliationReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnReconciliationReqReceived(ReconciliationReqResponse reqResponse)
+        {
+            ReconciliationReqReceived?.Invoke(this, reqResponse);
         }
 
         #endregion
