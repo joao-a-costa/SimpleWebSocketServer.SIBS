@@ -18,7 +18,9 @@
             RECEIPT_NOTIFICATION,
             PAIRING_REQUEST,
             PAIRING_RESPONSE,
-            PAIRING_NOTIFICATION
+            PAIRING_NOTIFICATION,
+            RECONCILIATION_REQUEST,
+            RECONCILIATION_RESPONSE
         }
 
         public enum PairingStep
