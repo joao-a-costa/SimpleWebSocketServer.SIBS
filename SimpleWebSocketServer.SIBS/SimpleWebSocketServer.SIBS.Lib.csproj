@@ -53,6 +53,8 @@
     <Compile Include="Models\EventNotification.cs" />
     <Compile Include="Models\AmountData.cs" />
     <Compile Include="Models\HeartbeatNotification.cs" />
+    <Compile Include="Models\PairingNotification.cs" />
+    <Compile Include="Models\PairingReqResponse.cs" />
     <Compile Include="Models\PaymentData.cs" />
     <Compile Include="Models\ProcessPaymentReqResponse.cs" />
     <Compile Include="Models\ReceiptNotification.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Models\SetAuthCredentialsReqResponse.cs" />
     <Compile Include="Models\SetAuthCredentialsReq.cs" />
     <Compile Include="Models\ProcessPaymentReq.cs" />
+    <Compile Include="Models\PairingReq.cs" />
     <Compile Include="Models\TerminalStatusReq.cs" />
     <Compile Include="Models\TransactionResponse.cs" />
     <Compile Include="Models\TerminalStatusReqResponse.cs" />

@@ -10,7 +10,7 @@ namespace SimpleWebSocketServer.SIBS.Console
     {
         #region "Constants"
 
-        private const string _WebSocketServerPrefix = "http://+:10005/";
+        private const string _WebSocketServerPrefix = "https://+:10005/";
         private const string _MessageEnterJSONCommand = "Enter JSON command or 'q' to stop:";
         private const string _MessageErrorErrorOccurred = "Error occurred";
         private const string _MessageErrorProcessingJSON = "Error processing JSON";

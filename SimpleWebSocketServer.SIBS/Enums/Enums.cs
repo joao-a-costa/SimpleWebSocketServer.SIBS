@@ -15,7 +15,17 @@
             HEARTBEAT_NOTIFICATION,
             TX_REQUEST,
             TX_RESPONSE,
-            RECEIPT_NOTIFICATION
+            RECEIPT_NOTIFICATION,
+            PAIRING_REQUEST,
+            PAIRING_RESPONSE,
+            PAIRING_NOTIFICATION
+        }
+
+        public enum PairingStep
+        {
+            GENERATE_PAIRING_CODE,
+            VALIDATE_PAIRING_CODE,
+            CANCEL_PAIRING
         }
 
         public enum Version
