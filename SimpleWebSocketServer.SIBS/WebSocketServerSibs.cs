@@ -34,6 +34,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void ReconciliationReqEventHandler(object sender, ReconciliationReqResponse reqResponse);
         public delegate void PairingNotificationEventHandler(object sender, PairingNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
+        public delegate void RefundReqResponseEventHandler(object sender, RefundReqResponse reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
         public event ClientDisconnectedEventHandler ClientDisconnected;
@@ -47,6 +48,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event ReconciliationReqEventHandler ReconciliationReqReceived;
         public event PairingNotificationEventHandler PairingNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
+        public event RefundReqResponseEventHandler RefundReqReceived;
 
         #endregion
 
@@ -184,6 +186,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnReconciliationReqReceived(JsonConvert
                                 .DeserializeObject<ReconciliationReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.REFUND_RESPONSE:
+                            OnRefundReqReceived(JsonConvert
+                                .DeserializeObject<RefundReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -305,6 +311,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnReconciliationReqReceived(ReconciliationReqResponse reqResponse)
         {
             ReconciliationReqReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnRefundReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnRefundReqReceived(RefundReqResponse reqResponse)
+        {
+            RefundReqReceived?.Invoke(this, reqResponse);
         }
 
         #endregion
