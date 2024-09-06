@@ -1,4 +1,7 @@
-﻿namespace SimpleWebSocketServer.SIBS.Lib.Enums
+﻿using System.ComponentModel;
+using System.Diagnostics;
+
+namespace SimpleWebSocketServer.SIBS.Lib.Enums
 {
     public class Enums
     {
@@ -35,6 +38,20 @@
         public enum Version
         {
             V_1
+        }
+
+        public enum TerminalCommandOptions
+        {
+            [Description("Send terminal status request")]
+            SendTerminalStatusRequest = 1,
+            [Description("Send process payment request")]
+            SendProcessPaymentRequest = 2,
+            [Description("Send pairing request")]
+            SendPairingRequest = 3,
+            [Description("Show list of commands")]
+            ShowListOfCommands = 9998,
+            [Description("Stop the server")]
+            StopTheServer = 9999
         }
     }
 }
