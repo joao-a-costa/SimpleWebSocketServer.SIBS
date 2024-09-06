@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -20,7 +21,9 @@ namespace SimpleWebSocketServer.SIBS.Console
         private const string _MessageStoppingTheServer = "Stopping the server...";
         private const string _MessageTheFollowingCommandsAreAvailable = "The following commands are available:";
         private const string _MessageEnterCode = "Enter code: ";
+        private const string _MessageEnterAmount = "Enter amount: ";
         private const string _MessageInvalidInput = "Invalid input";
+        private const string _MessageUsingLastSuccessfullTranscationDataForRefund = "Using last successfull transcation data for refund";
 
         #endregion
 
@@ -28,6 +31,7 @@ namespace SimpleWebSocketServer.SIBS.Console
 
         private static WebSocketServerSibs server;
         private static readonly ManualResetEvent statusEventReceived = new ManualResetEvent(false);
+        private static PaymentData LastPaymentData = null;
 
         #endregion
 
@@ -46,6 +50,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.ClientConnected += Server_ClientConnected;
             server.TerminalStatusReqResponseReceived += Server_TerminalStatusReqResponseReceived;
             server.PairingReqReceived += Server_PairingReqReceived;
+            server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
 
             try
             {
@@ -72,6 +77,11 @@ namespace SimpleWebSocketServer.SIBS.Console
 
             System.Console.WriteLine(_MessagePressAnyKeyToExit);
             System.Console.ReadKey();
+        }
+
+        private static void Server_ProcessPaymentReqReceived(object sender, ProcessPaymentReqResponse reqResponse)
+        {
+            LastPaymentData = reqResponse.PaymentData;
         }
 
         #region "Private Methods"
@@ -112,9 +122,14 @@ namespace SimpleWebSocketServer.SIBS.Console
                             break;
                         case TerminalCommandOptions.SendProcessPaymentRequest:
                             SendProcessPaymentRequest().Wait();
+                            WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.SendPairingRequest:
                             SendPairingRequest().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendRefundPaymentRequest:
+                            SendRefundPaymentRequest().Wait();
                             WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.ShowListOfCommands:
@@ -182,7 +197,7 @@ namespace SimpleWebSocketServer.SIBS.Console
                 // Read user input synchronously
                 string input = System.Console.ReadLine();
 
-                var pairingReq = new PairingReq() { PairingCode = input, PairingStep = Lib.Enums.Enums.PairingStep.VALIDATE_PAIRING_CODE };
+                var pairingReq = new PairingReq() { PairingCode = input, PairingStep = PairingStep.VALIDATE_PAIRING_CODE };
                 await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
 
                 statusEventReceived.Set();
@@ -249,9 +264,58 @@ namespace SimpleWebSocketServer.SIBS.Console
         {
             try
             {
-                var processPaymentRequest = new ProcessPaymentReq { AmountData = new AmountData { Amount = 0.01 } };
+                double amount = 0;
+                var invalidAmount = true;
+
+                while (invalidAmount)
+                {
+                    System.Console.Write(_MessageEnterAmount);
+
+                    // Read user input synchronously
+                    string input = System.Console.ReadLine();
+
+                    if (double.TryParse(input, out amount))
+                        invalidAmount = false;
+
+                    if (invalidAmount)
+                        System.Console.WriteLine(_MessageInvalidInput);
+                }
+
+                var processPaymentRequest = new ProcessPaymentReq { AmountData = new AmountData { Amount = amount } };
                 await server.SendMessageToClient(JsonConvert.SerializeObject(processPaymentRequest));
-                System.Console.WriteLine("Process Payment Request sent.");
+
+                statusEventReceived.Set();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a refund payment request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendRefundPaymentRequest()
+        {
+            try
+            {
+                System.Console.WriteLine(_MessageUsingLastSuccessfullTranscationDataForRefund);
+
+                var processPaymentRequest = new RefundReq {
+                    Amount = LastPaymentData.Amount,
+                    OriginalTransactionData = new OriginalTransactionData
+                    {
+                        PaymentType = LastPaymentData.PaymentType,
+                        ServerDateTime = LastPaymentData.ServerDateTime,
+                        SdkId = LastPaymentData.SdkId,
+                        ServerId = LastPaymentData.ServerId,
+                        TransactionType = LastPaymentData.TransactionType
+                    }
+                };
+                await server.SendMessageToClient(JsonConvert.SerializeObject(processPaymentRequest));
+
+                statusEventReceived.Set();
             }
             catch (Exception ex)
             {

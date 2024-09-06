@@ -21,16 +21,16 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
     public class RefundData
     {
         [JsonProperty("amount")]
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
         [JsonProperty("errorCode")]
-        public int ErrorCode { get; set; }
+        public double ErrorCode { get; set; }
 
         [JsonProperty("errorCodeExtension")]
         public string ErrorCodeExtension { get; set; }
 
         [JsonProperty("gratuityAmount")]
-        public int GratuityAmount { get; set; }
+        public double GratuityAmount { get; set; }
 
         [JsonProperty("periodId")]
         public int PeriodId { get; set; }
