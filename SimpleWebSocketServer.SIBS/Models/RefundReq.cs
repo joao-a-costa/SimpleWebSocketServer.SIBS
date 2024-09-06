@@ -18,7 +18,7 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public OriginalTransactionData OriginalTransactionData { get; set; }
 
         [JsonProperty("refundTransactionId")]
-        public string RefundTransactionId { get; set; }
+        public string RefundTransactionId { get; set; } = System.Guid.NewGuid().ToString();
 
         [JsonProperty("amount")]
         public double Amount { get; set; }
@@ -30,7 +30,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
     public class OriginalTransactionData
     {
         [JsonProperty("authorizationType")]
-        public string AuthorizationType { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AuthorizationType AuthorizationType { get; set; } = AuthorizationType.NA;
 
         [JsonProperty("paymentType")]
         public string PaymentType { get; set; }
@@ -45,9 +46,9 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public string SdkId { get; set; }
 
         [JsonProperty("serverDateTime")]
-        public string ServerDateTime { get; set; }
+        public System.DateTime ServerDateTime { get; set; }
 
         [JsonProperty("dccInitiatorId")]
-        public string DccInitiatorId { get; set; }
+        public string DccInitiatorId { get; set; } = string.Empty;
     }
 }

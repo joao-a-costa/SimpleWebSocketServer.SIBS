@@ -28,6 +28,15 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             REFUND_RESPONSE
         }
 
+        public enum AuthorizationType
+        {
+            NA,
+            GENERAL,
+            AFD,
+            EVC,
+            FUEL
+        }
+
         public enum PairingStep
         {
             GENERATE_PAIRING_CODE,
@@ -48,6 +57,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendProcessPaymentRequest = 2,
             [Description("Send pairing request")]
             SendPairingRequest = 3,
+            [Description("Send refund payment request")]
+            SendRefundPaymentRequest = 4,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]
