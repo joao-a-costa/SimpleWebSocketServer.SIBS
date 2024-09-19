@@ -132,6 +132,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             SendRefundPaymentRequest().Wait();
                             WaitForEvent(statusEventReceived);
                             break;
+                        case TerminalCommandOptions.SendReconciliationRequest:
+                            SendReconciliationRequest().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
                         case TerminalCommandOptions.ShowListOfCommands:
                             ShowListOfCommands();
                             break;
@@ -249,6 +253,23 @@ namespace SimpleWebSocketServer.SIBS.Console
             {
                 var terminalStatusRequest = new TerminalStatusReq();
                 await server.SendMessageToClient(JsonConvert.SerializeObject(terminalStatusRequest));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a reconciliation request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendReconciliationRequest()
+        {
+            try
+            {
+                var reconciliationReq = new ReconciliationReq();
+                await server.SendMessageToClient(JsonConvert.SerializeObject(reconciliationReq));
             }
             catch (Exception ex)
             {
