@@ -30,7 +30,7 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
     public class FinancialTotalItem
     {
         [JsonProperty("commissionTotal")]
-        public int CommissionTotal { get; set; }
+        public double CommissionTotal { get; set; }
 
         [JsonProperty("nrTotalTransactions")]
         public double NrTotalTransactions { get; set; }
