@@ -18,6 +18,6 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public AmountData AmountData { get; set; }
 
         [JsonProperty("reference")]
-        public string Reference { get; set; }
+        public string Reference { get; set; } = System.Guid.NewGuid().ToString().Substring(0, 20);
     }
 }

@@ -18,13 +18,13 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public OriginalTransactionData OriginalTransactionData { get; set; }
 
         [JsonProperty("refundTransactionId")]
-        public string RefundTransactionId { get; set; } = System.Guid.NewGuid().ToString();
+        public string RefundTransactionId { get; set; } = System.Guid.NewGuid().ToString().Substring(0, 20);
 
         [JsonProperty("amount")]
         public double Amount { get; set; }
 
         [JsonProperty("reference")]
-        public string Reference { get; set; }
+        public string Reference { get; set; } = System.Guid.NewGuid().ToString().Substring(0, 20);
     }
 
     public class OriginalTransactionData
