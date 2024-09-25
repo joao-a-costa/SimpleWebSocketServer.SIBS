@@ -51,6 +51,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.TerminalStatusReqResponseReceived += Server_TerminalStatusReqResponseReceived;
             server.PairingReqReceived += Server_PairingReqReceived;
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
+            server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
 
             try
             {
@@ -77,6 +78,11 @@ namespace SimpleWebSocketServer.SIBS.Console
 
             System.Console.WriteLine(_MessagePressAnyKeyToExit);
             System.Console.ReadKey();
+        }
+
+        private static void Server_ErrorNotificationReceived(object sender, ErrorNotification reqResponse)
+        {
+            //throw new NotImplementedException();
         }
 
         private static void Server_ProcessPaymentReqReceived(object sender, ProcessPaymentReqResponse reqResponse)

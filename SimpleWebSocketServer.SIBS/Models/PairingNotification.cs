@@ -11,6 +11,9 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         [JsonProperty("pairingStatus")]
         public string PairingStatusString{ get; set; }
 
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
         [JsonIgnore]
         public bool PairingStatus => PairingStatusString == _pairingStatusStringSuccess;
 

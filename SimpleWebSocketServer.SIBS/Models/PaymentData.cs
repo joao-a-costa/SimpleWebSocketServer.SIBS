@@ -24,7 +24,7 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public string PaymentType { get; set; }
 
         [JsonProperty("reference")]
-        public string Reference { get; set; }
+        public string Reference { get; set; } = Guid.NewGuid().ToString().Substring(0, 20);
 
         [JsonProperty("tsi")]
         public string Tsi { get; set; }
