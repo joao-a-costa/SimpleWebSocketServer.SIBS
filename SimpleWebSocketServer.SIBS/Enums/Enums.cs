@@ -61,6 +61,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendRefundPaymentRequest = 4,
             [Description("Send reconciliation request")]
             SendReconciliationRequest = 5,
+            [Description("Send set auth credentials request")]
+            SendSetAuthCredentialsRequest = 6,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]

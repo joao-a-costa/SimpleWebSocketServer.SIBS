@@ -142,6 +142,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             SendReconciliationRequest().Wait();
                             WaitForEvent(statusEventReceived);
                             break;
+                        case TerminalCommandOptions.SendSetAuthCredentialsRequest:
+                            SendSetAuthCredentialsReqRequest().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
                         case TerminalCommandOptions.ShowListOfCommands:
                             ShowListOfCommands();
                             break;
@@ -360,6 +364,23 @@ namespace SimpleWebSocketServer.SIBS.Console
             {
                 var pairingReq = new PairingReq();
                 await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Send set auth credentials request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendSetAuthCredentialsReqRequest()
+        {
+            try
+            {
+                var request = new SetAuthCredentialsReq();
+                await server.SendMessageToClient(JsonConvert.SerializeObject(request));
             }
             catch (Exception ex)
             {
