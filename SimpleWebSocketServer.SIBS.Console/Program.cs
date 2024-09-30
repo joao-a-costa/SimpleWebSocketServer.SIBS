@@ -20,7 +20,7 @@ namespace SimpleWebSocketServer.SIBS.Console
         private const string _MessagePressAnyKeyToExit = "Press any key to exit...";
         private const string _MessageStoppingTheServer = "Stopping the server...";
         private const string _MessageTheFollowingCommandsAreAvailable = "The following commands are available:";
-        private const string _MessageEnterCode = "Enter code: ";
+        private const string _MessageEnterCode = "Enter code or 'q' to stop: ";
         private const string _MessageEnterAmount = "Enter amount: ";
         private const string _MessageInvalidInput = "Invalid input";
         private const string _MessageUsingLastSuccessfullTranscationDataForRefund = "Using last successfull transcation data for refund";
@@ -134,6 +134,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             SendPairingRequest().Wait();
                             WaitForEvent(statusEventReceived);
                             break;
+                        case TerminalCommandOptions.SendPairingRequestCancel:
+                            SendPairingRequestCancel().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
                         case TerminalCommandOptions.SendRefundPaymentRequest:
                             SendRefundPaymentRequest().Wait();
                             WaitForEvent(statusEventReceived);
@@ -204,11 +208,17 @@ namespace SimpleWebSocketServer.SIBS.Console
             {
                 System.Console.Write(_MessageEnterCode);
 
-                // Read user input synchronously
                 string input = System.Console.ReadLine();
+                double code = 0;
+                var invalidAmount = true;
 
-                var pairingReq = new PairingReq() { PairingCode = input, PairingStep = PairingStep.VALIDATE_PAIRING_CODE };
-                await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
+                if (double.TryParse(input, out code))
+                    invalidAmount = false;
+
+                if (invalidAmount || input == "q")
+                    await SendPairingRequestCancel();
+                else
+                    await SendPairingRequestCode(code.ToString());
 
                 statusEventReceived.Set();
             }
@@ -359,6 +369,41 @@ namespace SimpleWebSocketServer.SIBS.Console
             try
             {
                 var pairingReq = new PairingReq();
+                await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a pairing code request cancel
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendPairingRequestCancel()
+        {
+            try
+            {
+                var pairingReq = new PairingReq() {  PairingStep = PairingStep.CANCEL_PAIRING };
+                await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a pairing code request code to validate
+        /// </summary>
+        /// <param name="code">The code to validate</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendPairingRequestCode(string code)
+        {
+            try
+            {
+                var pairingReq = new PairingReq() { PairingCode = code, PairingStep = PairingStep.VALIDATE_PAIRING_CODE };
                 await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
             }
             catch (Exception ex)
