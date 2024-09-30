@@ -57,10 +57,12 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendProcessPaymentRequest = 2,
             [Description("Send pairing request")]
             SendPairingRequest = 3,
+            [Description("Send pairing request cancel")]
+            SendPairingRequestCancel = 4,
             [Description("Send refund payment request")]
-            SendRefundPaymentRequest = 4,
+            SendRefundPaymentRequest = 5,
             [Description("Send reconciliation request")]
-            SendReconciliationRequest = 5,
+            SendReconciliationRequest = 6,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]
