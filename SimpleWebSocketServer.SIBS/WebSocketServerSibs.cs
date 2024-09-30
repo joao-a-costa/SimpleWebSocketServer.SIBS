@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SimpleWebSocketServer.SIBS.Lib.Models;
@@ -17,6 +19,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         /// The WebSocket server
         /// </summary>
         private WebSocketServer server;
+        private CancellationTokenSource cancellationTokenSource;
+        private Task serverTask;
 
         #endregion
 
@@ -69,21 +73,46 @@ namespace SimpleWebSocketServer.SIBS.Lib
             // Create an instance of WebSocketServer
             server = new WebSocketServer(prefix);
 
-            try
-            {
-                // Define events for server lifecycle
-                server.ServerStarted += Server_ServerStarted;
-                server.ClientConnected += Server_ClientConnected;
-                server.ClientDisconnected += Server_ClientDisconnected;
-                server.MessageReceived += Server_MessageReceived;
+            // Initialize the cancellation token source
+            cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-                // Start the WebSocket server
-                Task.Run(() => Task.Run(() => server.Start()).Wait());
-            }
-            catch (Exception ex)
+            // Start the WebSocket server asynchronously
+            serverTask = Task.Run(() =>
             {
-                Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
-            }
+                try
+                {
+                    // Define events for server lifecycle
+                    server.ServerStarted += Server_ServerStarted;
+                    server.ClientConnected += Server_ClientConnected;
+                    server.ClientDisconnected += Server_ClientDisconnected;
+                    server.MessageReceived += Server_MessageReceived;
+
+                    // Start the WebSocket server
+                    server.Start();
+
+                    // Keep the server running until a cancellation is requested
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        // You can add more logic here if needed (e.g., monitor the server)
+                        Task.Delay(1000, cancellationToken).Wait(cancellationToken); // Poll every 1 second
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    // This is expected when the task is canceled
+                }
+                catch (HttpListenerException ex)
+                {
+                    // Log and handle HttpListener specific exceptions
+                    Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    // Log any other exceptions
+                    Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
+                }
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -102,8 +131,19 @@ namespace SimpleWebSocketServer.SIBS.Lib
         /// <returns>The task</returns>
         public void Stop()
         {
-            Task.Run(() => Task.Run(() => server.Stop()).Wait()).Wait();
-        }   
+            // Signal the task to cancel
+            cancellationTokenSource?.Cancel();
+
+            // Stop the WebSocket server
+            if (serverTask != null && !serverTask.IsCompleted)
+            {
+                server.Stop().Wait();
+                serverTask.Wait();  // Optionally wait for the task to complete
+            }
+
+            // Dispose of the cancellation token source
+            cancellationTokenSource?.Dispose();
+        }
 
         #endregion
 
