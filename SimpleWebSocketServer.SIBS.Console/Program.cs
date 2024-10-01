@@ -80,16 +80,6 @@ namespace SimpleWebSocketServer.SIBS.Console
             System.Console.ReadKey();
         }
 
-        private static void Server_ErrorNotificationReceived(object sender, ErrorNotification reqResponse)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private static void Server_ProcessPaymentReqReceived(object sender, ProcessPaymentReqResponse reqResponse)
-        {
-            LastPaymentData = reqResponse.PaymentData;
-        }
-
         #region "Private Methods"
 
         /// <summary>
@@ -191,6 +181,16 @@ namespace SimpleWebSocketServer.SIBS.Console
         {
             eventHandle.WaitOne();
             eventHandle.Reset();
+        }
+
+        private static void Server_ErrorNotificationReceived(object sender, ErrorNotification reqResponse)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private static void Server_ProcessPaymentReqReceived(object sender, ProcessPaymentReqResponse reqResponse)
+        {
+            LastPaymentData = reqResponse.PaymentData;
         }
 
         #endregion
