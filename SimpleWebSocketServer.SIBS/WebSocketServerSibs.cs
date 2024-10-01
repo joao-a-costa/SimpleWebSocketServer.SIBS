@@ -39,6 +39,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void PairingNotificationEventHandler(object sender, PairingNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
         public delegate void RefundReqResponseEventHandler(object sender, RefundReqResponse reqResponse);
+        public delegate void InstallCertificateMessageEventHandler(object sender, string e);
 
         public event ClientConnectedEventHandler ClientConnected;
         public event ClientDisconnectedEventHandler ClientDisconnected;
@@ -53,6 +54,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event PairingNotificationEventHandler PairingNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
         public event RefundReqResponseEventHandler RefundReqReceived;
+        public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
 
         #endregion
 
@@ -116,16 +118,6 @@ namespace SimpleWebSocketServer.SIBS.Lib
         }
 
         /// <summary>
-        /// Send a message to the client
-        /// </summary>
-        /// <param name="message">The message to send</param>
-        /// <returns>The task</returns>
-        public async Task SendMessageToClient(string message)
-        {
-            await server.SendMessageToClient(message);
-        }
-
-        /// <summary>
         /// Stop the WebSocket server
         /// </summary>
         /// <returns>The task</returns>
@@ -143,6 +135,36 @@ namespace SimpleWebSocketServer.SIBS.Lib
 
             // Dispose of the cancellation token source
             cancellationTokenSource?.Dispose();
+        }
+
+        /// <summary>
+        /// Send a message to the client
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        /// <returns>The task</returns>
+        public async Task SendMessageToClient(string message)
+        {
+            await server.SendMessageToClient(message);
+        }
+
+        public static async Task<bool> InstallCertificate(string prefix, string certificatePath, string certificatePassword)
+        {
+            var res = false;
+
+            try
+            {
+                WebSocketServer.InstallCertificateMessage += WebSocketServer_InstallCertificateMessage;
+                res = await WebSocketServer.InstallCertificate(prefix, certificatePath, certificatePassword);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
+            }
+            finally
+            {
+                WebSocketServer.InstallCertificateMessage -= WebSocketServer_InstallCertificateMessage;
+            }
+            return res;
         }
 
         #endregion
@@ -360,6 +382,16 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnRefundReqReceived(RefundReqResponse reqResponse)
         {
             RefundReqReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// WebSocketServer_InstallCertificateMessage event handler
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The message</param>
+        private static void WebSocketServer_InstallCertificateMessage(object sender, string e)
+        {
+            InstallCertificateMessage?.Invoke(sender, e);
         }
 
         #endregion
