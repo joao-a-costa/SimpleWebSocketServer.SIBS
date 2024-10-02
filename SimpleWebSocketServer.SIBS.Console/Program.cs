@@ -24,6 +24,7 @@ namespace SimpleWebSocketServer.SIBS.Console
         private const string _MessageEnterAmount = "Enter amount: ";
         private const string _MessageInvalidInput = "Invalid input";
         private const string _MessageUsingLastSuccessfullTranscationDataForRefund = "Using last successfull transcation data for refund";
+        private const string _MessageEnterIBANOrEmptyToUseLastOne = "Enter IBAN or 'enter' to use last one: ";
 
         #endregion
 
@@ -52,6 +53,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.PairingReqReceived += Server_PairingReqReceived;
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
+            server.ReconciliationReqReceived += Server_ReconciliationReqReceived;
 
             try
             {
@@ -255,6 +257,11 @@ namespace SimpleWebSocketServer.SIBS.Console
             }
         }
 
+        private static void Server_ReconciliationReqReceived(object sender, ReconciliationReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
         #endregion
 
         #region "Commands"
@@ -284,7 +291,14 @@ namespace SimpleWebSocketServer.SIBS.Console
         {
             try
             {
-                var reconciliationReq = new ReconciliationReq();
+                string input = string.Empty;
+
+                System.Console.Write(_MessageEnterIBANOrEmptyToUseLastOne);
+
+                // Read user input synchronously
+                input = System.Console.ReadLine();
+
+                var reconciliationReq = new ReconciliationReq() { Iban = input };
                 await server.SendMessageToClient(JsonConvert.SerializeObject(reconciliationReq));
             }
             catch (Exception ex)
