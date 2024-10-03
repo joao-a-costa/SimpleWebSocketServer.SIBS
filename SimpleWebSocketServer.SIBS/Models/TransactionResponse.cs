@@ -8,7 +8,7 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
     public class TransactionResponse
     {
         [JsonProperty("transactionId")]
-        public string TransactionId { get; set; } = Guid.NewGuid().ToString();
+        public string TransactionId { get; set; } = Guid.NewGuid().ToString().Substring(0, 20);
 
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]

@@ -18,6 +18,6 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         public PaymentData PaymentData { get; set; }
 
         [JsonProperty("transactionId")]
-        public string TransactionId { get; set; }
+        public string TransactionId { get; set; } = System.Guid.NewGuid().ToString().Substring(0, 20);
     }
 }
