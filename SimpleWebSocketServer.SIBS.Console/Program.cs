@@ -51,6 +51,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.ClientConnected += Server_ClientConnected;
             server.TerminalStatusReqResponseReceived += Server_TerminalStatusReqResponseReceived;
             server.PairingReqReceived += Server_PairingReqReceived;
+            server.PairingNotificationReceived += Server_PairingNotificationReceived;
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
             server.ReconciliationReqReceived += Server_ReconciliationReqReceived;
@@ -228,6 +229,11 @@ namespace SimpleWebSocketServer.SIBS.Console
             {
                 System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
             }
+        }
+
+        private static void Server_PairingNotificationReceived(object sender, PairingNotification reqResponse)
+        {
+            statusEventReceived.Set();
         }
 
         /// <summary>
