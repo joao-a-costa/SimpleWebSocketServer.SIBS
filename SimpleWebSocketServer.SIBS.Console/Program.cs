@@ -56,6 +56,8 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
             server.ReconciliationReqReceived += Server_ReconciliationReqReceived;
             server.CommunicationsReqReceived += Server_CommunicationsReqReceived;
+            server.GetMerchantDataReqReceived += Server_GetMerchantDataReqReceived;
+            server.SetMerchantDataReqReceived += Server_SetMerchantDataReqReceived;
 
             try
             {
@@ -142,6 +144,14 @@ namespace SimpleWebSocketServer.SIBS.Console
                             break;
                         case TerminalCommandOptions.SendCommunicationStatusRequest:
                             SendCommunicationRequest().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendGetMerchantDataRequest:
+                            SendGetMerchantDataRequest(new GetMerchantDataReq()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendSetMerchantDataRequest:
+                            SendSetMerchantDataRequest(new MerchantData()).Wait();
                             WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.ShowListOfCommands:
@@ -278,6 +288,16 @@ namespace SimpleWebSocketServer.SIBS.Console
             statusEventReceived.Set();
         }
 
+        private static void Server_GetMerchantDataReqReceived(GetMerchantDataReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
+        private static void Server_SetMerchantDataReqReceived(SetMerchantDataReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
         #endregion
 
         #region "Commands"
@@ -340,6 +360,45 @@ namespace SimpleWebSocketServer.SIBS.Console
             }
         }
 
+        /// <summary>
+        /// Sends a get merchant data request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendGetMerchantDataRequest(GetMerchantDataReq getMerchantDataReq)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(getMerchantDataReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a set merchant data request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendSetMerchantDataRequest(MerchantData merchantData)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(new SetMerchantDataReq()
+                {
+                    AcceptorAddress = merchantData.AcceptorAddress,
+                    AcceptorLocation = merchantData.AcceptorLocation,
+                    AcceptorName = merchantData.AcceptorName,
+                    FiscalNumber = merchantData.FiscalNumber,
+                    MerchantName = merchantData.MerchantName,
+                    TerminalName = merchantData.TerminalName
+                }));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// Sends a process payment request.

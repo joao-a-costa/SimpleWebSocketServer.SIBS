@@ -40,6 +40,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
         public delegate void RefundReqResponseEventHandler(object sender, RefundReqResponse reqResponse);
         public delegate void CommunicationsReqResponseEventHandler(CommunicationsReqResponse reqResponse);
+        public delegate void GetMerchantDataReqResponseEventHandler(GetMerchantDataReqResponse reqResponse);
+        public delegate void SetMerchantDataReqResponseEventHandler(SetMerchantDataReqResponse reqResponse);
         public delegate void InstallCertificateMessageEventHandler(object sender, string e);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -56,6 +58,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
         public event RefundReqResponseEventHandler RefundReqReceived;
         public event CommunicationsReqResponseEventHandler CommunicationsReqReceived;
+        public event GetMerchantDataReqResponseEventHandler GetMerchantDataReqReceived;
+        public event SetMerchantDataReqResponseEventHandler SetMerchantDataReqReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
 
         #endregion
@@ -258,6 +262,14 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnCommunicationsReqReceived(JsonConvert
                                 .DeserializeObject<CommunicationsReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.GET_MERCHANT_DATA_RESPONSE:
+                            OnGetMerchantDataReqReceived(JsonConvert
+                                .DeserializeObject<GetMerchantDataReqResponse>(e));
+                            break;
+                        case Enums.Enums.RequestType.SET_MERCHANT_DATA_RESPONSE:
+                            OnSetMerchantDataReqReceived(JsonConvert
+                                .DeserializeObject<SetMerchantDataReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -393,10 +405,28 @@ namespace SimpleWebSocketServer.SIBS.Lib
         /// <summary>
         /// OnCommunicationsReqReceived event handler
         /// </summary>
-        /// <param name="reqResponse"></param>
+        /// <param name="reqResponse">The response</param>
         private void OnCommunicationsReqReceived(CommunicationsReqResponse reqResponse)
         {
             CommunicationsReqReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnGetMerchantDataReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnGetMerchantDataReqReceived(GetMerchantDataReqResponse reqResponse)
+        {
+            GetMerchantDataReqReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnSetMerchantDataReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnSetMerchantDataReqReceived(SetMerchantDataReqResponse reqResponse)
+        {
+            SetMerchantDataReqReceived?.Invoke(reqResponse);
         }
 
         /// <summary>
