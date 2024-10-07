@@ -54,6 +54,8 @@
     <Compile Include="Models\AmountData.cs" />
     <Compile Include="Models\HeartbeatNotification.cs" />
     <Compile Include="Models\PairingNotification.cs" />
+    <Compile Include="Models\CommunicationsReq.cs" />
+    <Compile Include="Models\CommunicationsReqResponse.cs" />
     <Compile Include="Models\ReconciliationReqResponse.cs" />
     <Compile Include="Models\ReconciliationReq.cs" />
     <Compile Include="Models\PairingReqResponse.cs" />

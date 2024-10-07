@@ -55,6 +55,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.ProcessPaymentReqReceived += Server_ProcessPaymentReqReceived;
             server.ErrorNotificationReceived += Server_ErrorNotificationReceived;
             server.ReconciliationReqReceived += Server_ReconciliationReqReceived;
+            server.CommunicationsReqReceived += Server_CommunicationsReqReceived;
 
             try
             {
@@ -137,6 +138,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             break;
                         case TerminalCommandOptions.SendReconciliationRequest:
                             SendReconciliationRequest().Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendCommunicationStatusRequest:
+                            SendCommunicationRequest().Wait();
                             WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.ShowListOfCommands:
@@ -268,6 +273,11 @@ namespace SimpleWebSocketServer.SIBS.Console
             statusEventReceived.Set();
         }
 
+        private static void Server_CommunicationsReqReceived(CommunicationsReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
         #endregion
 
         #region "Commands"
@@ -312,6 +322,24 @@ namespace SimpleWebSocketServer.SIBS.Console
                 System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Sends a communication request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendCommunicationRequest()
+        {
+            try
+            {
+                var communicationsReq = new CommunicationsReq();
+                await server.SendMessageToClient(JsonConvert.SerializeObject(communicationsReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
 
         /// <summary>
         /// Sends a process payment request.
