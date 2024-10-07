@@ -49,6 +49,11 @@
   <ItemGroup>
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Models\CardData.cs" />
+    <Compile Include="Models\MerchantData.cs" />
+    <Compile Include="Models\SetMerchantDataReq.cs" />
+    <Compile Include="Models\SetMerchantDataReqResponse.cs" />
+    <Compile Include="Models\GetMerchantDataReqResponse.cs" />
+    <Compile Include="Models\GetMerchantDataReq.cs" />
     <Compile Include="Models\ErrorNotification.cs" />
     <Compile Include="Models\EventNotification.cs" />
     <Compile Include="Models\AmountData.cs" />

@@ -28,6 +28,10 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             REFUND_RESPONSE,
             COMMUNICATIONS_REQUEST,
             COMMUNICATIONS_RESPONSE,
+            GET_MERCHANT_DATA_REQUEST,
+            GET_MERCHANT_DATA_RESPONSE,
+            SET_MERCHANT_DATA_REQUEST,
+            SET_MERCHANT_DATA_RESPONSE,
         }
 
         public enum AuthorizationType
@@ -67,6 +71,10 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendReconciliationRequest = 6,
             [Description("Send communication status request")]
             SendCommunicationStatusRequest = 7,
+            [Description("Send get merchant data request")]
+            SendGetMerchantDataRequest = 8,
+            [Description("Send set merchant data request")]
+            SendSetMerchantDataRequest = 9,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]
