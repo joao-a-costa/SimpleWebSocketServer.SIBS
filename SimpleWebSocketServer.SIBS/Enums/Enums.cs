@@ -25,7 +25,9 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             RECONCILIATION_REQUEST,
             RECONCILIATION_RESPONSE,
             REFUND_REQUEST,
-            REFUND_RESPONSE
+            REFUND_RESPONSE,
+            COMMUNICATIONS_REQUEST,
+            COMMUNICATIONS_RESPONSE,
         }
 
         public enum AuthorizationType
@@ -63,6 +65,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendRefundPaymentRequest = 5,
             [Description("Send reconciliation request")]
             SendReconciliationRequest = 6,
+            [Description("Send communication status request")]
+            SendCommunicationStatusRequest = 7,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]

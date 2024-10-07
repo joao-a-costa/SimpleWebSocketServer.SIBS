@@ -39,6 +39,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void PairingNotificationEventHandler(object sender, PairingNotification reqResponse);
         public delegate void ErrorNotificationEventHandler(object sender, ErrorNotification reqResponse);
         public delegate void RefundReqResponseEventHandler(object sender, RefundReqResponse reqResponse);
+        public delegate void CommunicationsReqResponseEventHandler(CommunicationsReqResponse reqResponse);
         public delegate void InstallCertificateMessageEventHandler(object sender, string e);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -54,6 +55,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event PairingNotificationEventHandler PairingNotificationReceived;
         public event ErrorNotificationEventHandler ErrorNotificationReceived;
         public event RefundReqResponseEventHandler RefundReqReceived;
+        public event CommunicationsReqResponseEventHandler CommunicationsReqReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
 
         #endregion
@@ -252,6 +254,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnRefundReqReceived(JsonConvert
                                 .DeserializeObject<RefundReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.COMMUNICATIONS_RESPONSE:
+                            OnCommunicationsReqReceived(JsonConvert
+                                .DeserializeObject<CommunicationsReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -382,6 +388,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnRefundReqReceived(RefundReqResponse reqResponse)
         {
             RefundReqReceived?.Invoke(this, reqResponse);
+        }
+
+        /// <summary>
+        /// OnCommunicationsReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse"></param>
+        private void OnCommunicationsReqReceived(CommunicationsReqResponse reqResponse)
+        {
+            CommunicationsReqReceived?.Invoke(reqResponse);
         }
 
         /// <summary>
