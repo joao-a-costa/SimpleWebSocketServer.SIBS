@@ -49,7 +49,9 @@
   <ItemGroup>
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Models\CardData.cs" />
+    <Compile Include="Models\ConfigTerminalReqResponse.cs" />
     <Compile Include="Models\MerchantData.cs" />
+    <Compile Include="Models\ConfigTerminalReq.cs" />
     <Compile Include="Models\SetMerchantDataReq.cs" />
     <Compile Include="Models\SetMerchantDataReqResponse.cs" />
     <Compile Include="Models\GetMerchantDataReqResponse.cs" />
