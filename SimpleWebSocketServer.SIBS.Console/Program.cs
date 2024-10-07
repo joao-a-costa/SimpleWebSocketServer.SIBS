@@ -58,6 +58,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.CommunicationsReqReceived += Server_CommunicationsReqReceived;
             server.GetMerchantDataReqReceived += Server_GetMerchantDataReqReceived;
             server.SetMerchantDataReqReceived += Server_SetMerchantDataReqReceived;
+            server.ConfigTerminalReqReceived += Server_ConfigTerminalReqReceived;
 
             try
             {
@@ -152,6 +153,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             break;
                         case TerminalCommandOptions.SendSetMerchantDataRequest:
                             SendSetMerchantDataRequest(new MerchantData()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendConfigTerminalRequest:
+                            SendConfigTerminalRequest(new ConfigTerminalReq()).Wait();
                             WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.ShowListOfCommands:
@@ -294,6 +299,11 @@ namespace SimpleWebSocketServer.SIBS.Console
         }
 
         private static void Server_SetMerchantDataReqReceived(SetMerchantDataReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
+        private static void Server_ConfigTerminalReqReceived(ConfigTerminalReqResponse reqResponse)
         {
             statusEventReceived.Set();
         }
@@ -512,6 +522,22 @@ namespace SimpleWebSocketServer.SIBS.Console
             {
                 var pairingReq = new PairingReq() { PairingCode = code, PairingStep = PairingStep.VALIDATE_PAIRING_CODE };
                 await server.SendMessageToClient(JsonConvert.SerializeObject(pairingReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a set merchant data request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendConfigTerminalRequest(ConfigTerminalReq configTerminalReq)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(configTerminalReq));
             }
             catch (Exception ex)
             {

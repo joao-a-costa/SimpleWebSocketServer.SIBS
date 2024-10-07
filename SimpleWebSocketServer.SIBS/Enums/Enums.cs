@@ -32,6 +32,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             GET_MERCHANT_DATA_RESPONSE,
             SET_MERCHANT_DATA_REQUEST,
             SET_MERCHANT_DATA_RESPONSE,
+            CONFIG_TERMINAL_REQUEST,
+            CONFIG_TERMINAL_RESPONSE,
         }
 
         public enum AuthorizationType
@@ -55,6 +57,24 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             V_1
         }
 
+        public enum PrintMode
+        {
+            [Description("MODE_A")]
+            MODE_A,
+            [Description("MODE_B")]
+            MODE_B,
+            [Description("MODE_C")]
+            MODE_C,
+        }
+
+        public enum ReceiptFormat
+        {
+            [Description("TWENTY_COLUMNS")]
+            TWENTY_COLUMNS,
+            [Description("FORTY_COLUMNS")]
+            FORTY_COLUMNS,
+        }
+
         public enum TerminalCommandOptions
         {
             [Description("Send terminal status request")]
@@ -75,6 +95,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendGetMerchantDataRequest = 8,
             [Description("Send set merchant data request")]
             SendSetMerchantDataRequest = 9,
+            [Description("Send configuration terminal request")]
+            SendConfigTerminalRequest = 10,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]

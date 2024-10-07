@@ -42,6 +42,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void CommunicationsReqResponseEventHandler(CommunicationsReqResponse reqResponse);
         public delegate void GetMerchantDataReqResponseEventHandler(GetMerchantDataReqResponse reqResponse);
         public delegate void SetMerchantDataReqResponseEventHandler(SetMerchantDataReqResponse reqResponse);
+        public delegate void ConfigTerminalReqResponseEventHandler(ConfigTerminalReqResponse reqResponse);
         public delegate void InstallCertificateMessageEventHandler(object sender, string e);
 
         public event ClientConnectedEventHandler ClientConnected;
@@ -60,6 +61,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event CommunicationsReqResponseEventHandler CommunicationsReqReceived;
         public event GetMerchantDataReqResponseEventHandler GetMerchantDataReqReceived;
         public event SetMerchantDataReqResponseEventHandler SetMerchantDataReqReceived;
+        public event ConfigTerminalReqResponseEventHandler ConfigTerminalReqReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
 
         #endregion
@@ -270,6 +272,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnSetMerchantDataReqReceived(JsonConvert
                                 .DeserializeObject<SetMerchantDataReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.CONFIG_TERMINAL_RESPONSE:
+                            OnConfigTerminalReqReceived(JsonConvert
+                                .DeserializeObject<ConfigTerminalReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -427,6 +433,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnSetMerchantDataReqReceived(SetMerchantDataReqResponse reqResponse)
         {
             SetMerchantDataReqReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnConfigTerminalReqReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnConfigTerminalReqReceived(ConfigTerminalReqResponse reqResponse)
+        {
+            ConfigTerminalReqReceived?.Invoke(reqResponse);
         }
 
         /// <summary>
