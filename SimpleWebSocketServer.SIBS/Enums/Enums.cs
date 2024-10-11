@@ -59,11 +59,11 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
 
         public enum PrintMode
         {
-            [Description("MODE_A")]
+            [Description("A - Impressão no SmartPOS")]
             MODE_A,
-            [Description("MODE_B")]
+            [Description("B - Talão cliente - Impressão no SmartPOS Talão comerciante - Gestão no ePOS")]
             MODE_B,
-            [Description("MODE_C")]
+            [Description("C - Gestão no ePOS")]
             MODE_C,
         }
 
