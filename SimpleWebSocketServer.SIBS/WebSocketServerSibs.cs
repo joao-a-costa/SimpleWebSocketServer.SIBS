@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SimpleWebSocketServer.SIBS.Lib.Helper;
 using SimpleWebSocketServer.SIBS.Lib.Models;
 
 namespace SimpleWebSocketServer.SIBS.Lib
@@ -172,6 +173,22 @@ namespace SimpleWebSocketServer.SIBS.Lib
             {
                 WebSocketServer.InstallCertificateMessage -= WebSocketServer_InstallCertificateMessage;
             }
+            return res;
+        }
+
+        public static async Task<bool> AddFirewallRule(string applicationName, string prefix)
+        {
+            var res = false;
+
+            try
+            {
+                res = FirewallHelper.AddInboundRule(applicationName, (ushort)FirewallHelper.GetIpAndPort(prefix).port);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
+            }
+
             return res;
         }
 
