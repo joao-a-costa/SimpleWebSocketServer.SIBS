@@ -39,15 +39,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsFirewallHelper, Version=2.2.0.85, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>..\..\smart-cashless\packages\WindowsFirewallHelper.2.2.0.86\lib\net40\WindowsFirewallHelper.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Helper\FirewallHelper.cs" />
     <Compile Include="Models\CardData.cs" />
     <Compile Include="Models\ConfigTerminalReqResponse.cs" />
     <Compile Include="Models\MerchantData.cs" />
@@ -97,6 +102,23 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\projects\SimpleWebSocketServer\SimpleWebSocketServer\SimpleWebSocketServer.Lib.csproj">
+      <Project>{09fa50e6-3796-468e-8e9c-dfe8f53b5ef7}</Project>
+      <Name>SimpleWebSocketServer.Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MpComExportsLib">
+      <Guid>{8C389764-F036-48F2-9AE2-88C260DCF43B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
