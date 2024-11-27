@@ -156,14 +156,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
             await server.SendMessageToClient(message);
         }
 
-        public static async Task<bool> InstallCertificate(string prefix, string certificatePath, string certificatePassword)
+        public static async Task<bool> InstallCertificate(string prefix, string certificatePath, string certificatePassword,
+            string appId, string certificateThumbprint)
         {
             var res = false;
 
             try
             {
                 WebSocketServer.InstallCertificateMessage += WebSocketServer_InstallCertificateMessage;
-                res = await WebSocketServer.InstallCertificate(prefix, certificatePath, certificatePassword);
+                res = await WebSocketServer.InstallCertificate(prefix, certificatePath, certificatePassword, appId, certificateThumbprint);
             }
             catch(Exception ex)
             {
@@ -176,9 +177,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
             return res;
         }
 
-        public static async Task<bool> AddFirewallRule(string applicationName, string prefix)
+        public static Tuple<bool, string> AddFirewallRule(string applicationName, string prefix)
         {
             var res = false;
+            var resMessage = string.Empty;
 
             try
             {
@@ -186,10 +188,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{_MessageErrorOccurred}: {ex.Message}");
+                resMessage = $"{_MessageErrorOccurred}: {ex.Message}";
             }
 
-            return res;
+            return Tuple.Create(res, resMessage);
         }
 
         #endregion
