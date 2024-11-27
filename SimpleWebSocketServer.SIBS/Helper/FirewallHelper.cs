@@ -1,4 +1,5 @@
-﻿using WindowsFirewallHelper;
+﻿using System.Linq;
+using WindowsFirewallHelper;
 
 namespace SimpleWebSocketServer.SIBS.Lib.Helper
 {
@@ -6,6 +7,7 @@ namespace SimpleWebSocketServer.SIBS.Lib.Helper
     {
         /// <summary>
         /// Adds an inbound rule to the firewall for the specified application name and port.
+        /// If a rule with the same name exists, it will be replaced.
         /// </summary>
         /// <param name="applicationName">The name of the application.</param>
         /// <param name="port">The port number.</param>
@@ -14,23 +16,44 @@ namespace SimpleWebSocketServer.SIBS.Lib.Helper
         {
             var firewall = FirewallManager.Instance;
 
-            var rule = firewall.CreatePortRule(
-                FirewallProfiles.Domain | FirewallProfiles.Private | FirewallProfiles.Public,
-                $"{applicationName}Inbound",
-                FirewallAction.Allow,
-                port,
-                FirewallProtocol.TCP);
-            rule.Direction = FirewallDirection.Inbound;
-            FirewallManager.Instance.Rules.Add(rule);
+            string inboundRuleName = $"{applicationName}Inbound";
+            string outboundRuleName = $"{applicationName}Outbound";
 
-            rule = firewall.CreatePortRule(
+            // Remove existing inbound rule if it exists
+            var existingInboundRule = firewall.Rules
+                .FirstOrDefault(r => r.Name == inboundRuleName && r.Direction == FirewallDirection.Inbound);
+            if (existingInboundRule != null)
+            {
+                FirewallManager.Instance.Rules.Remove(existingInboundRule);
+            }
+
+            // Remove existing outbound rule if it exists
+            var existingOutboundRule = firewall.Rules
+                .FirstOrDefault(r => r.Name == outboundRuleName && r.Direction == FirewallDirection.Outbound);
+            if (existingOutboundRule != null)
+            {
+                FirewallManager.Instance.Rules.Remove(existingOutboundRule);
+            }
+
+            // Create and add the new inbound rule
+            var inboundRule = firewall.CreatePortRule(
                 FirewallProfiles.Domain | FirewallProfiles.Private | FirewallProfiles.Public,
-                $"{applicationName}Outbound",
+                inboundRuleName,
                 FirewallAction.Allow,
                 port,
                 FirewallProtocol.TCP);
-            rule.Direction = FirewallDirection.Outbound;
-            FirewallManager.Instance.Rules.Add(rule);
+            inboundRule.Direction = FirewallDirection.Inbound;
+            FirewallManager.Instance.Rules.Add(inboundRule);
+
+            // Create and add the new outbound rule
+            var outboundRule = firewall.CreatePortRule(
+                FirewallProfiles.Domain | FirewallProfiles.Private | FirewallProfiles.Public,
+                outboundRuleName,
+                FirewallAction.Allow,
+                port,
+                FirewallProtocol.TCP);
+            outboundRule.Direction = FirewallDirection.Outbound;
+            FirewallManager.Instance.Rules.Add(outboundRule);
 
             return true;
         }
