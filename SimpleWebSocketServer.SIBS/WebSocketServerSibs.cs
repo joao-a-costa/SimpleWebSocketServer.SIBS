@@ -45,6 +45,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void SetMerchantDataReqResponseEventHandler(SetMerchantDataReqResponse reqResponse);
         public delegate void ConfigTerminalReqResponseEventHandler(ConfigTerminalReqResponse reqResponse);
         public delegate void InstallCertificateMessageEventHandler(object sender, string e);
+        public delegate void CustomerDataResponseEventHandler(CustomerDataResponse reqResponse);
+        public delegate void LoyaltyInquiryResponseEventHandler(LoyaltyInquiryResponse reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
         public event ClientDisconnectedEventHandler ClientDisconnected;
@@ -63,6 +65,8 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event GetMerchantDataReqResponseEventHandler GetMerchantDataReqReceived;
         public event SetMerchantDataReqResponseEventHandler SetMerchantDataReqReceived;
         public event ConfigTerminalReqResponseEventHandler ConfigTerminalReqReceived;
+        public event CustomerDataResponseEventHandler CustomerDataResponseReceived;
+        public event LoyaltyInquiryResponseEventHandler LoyaltyInquiryResponseReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
 
         #endregion
@@ -295,6 +299,14 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnConfigTerminalReqReceived(JsonConvert
                                 .DeserializeObject<ConfigTerminalReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.CUSTOMER_DATA_RESPONSE:
+                            OnCustomerDataResponseReceived(JsonConvert
+                                .DeserializeObject<CustomerDataResponse>(e));
+                            break;
+                        case Enums.Enums.RequestType.LOYALTY_INQUIRY_RESPONSE:
+                            OnLoyaltyInquiryResponseReceived(JsonConvert
+                                .DeserializeObject<LoyaltyInquiryResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -471,6 +483,24 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private static void WebSocketServer_InstallCertificateMessage(object sender, string e)
         {
             InstallCertificateMessage?.Invoke(sender, e);
+        }
+
+        /// <summary>
+        /// OnCustomerDataResponseReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnCustomerDataResponseReceived(CustomerDataResponse reqResponse)
+        {
+            CustomerDataResponseReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnCustomerDataResponseReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnLoyaltyInquiryResponseReceived(LoyaltyInquiryResponse reqResponse)
+        {
+            LoyaltyInquiryResponseReceived?.Invoke(reqResponse);
         }
 
         #endregion

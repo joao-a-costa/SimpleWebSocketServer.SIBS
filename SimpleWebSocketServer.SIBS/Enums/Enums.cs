@@ -34,6 +34,10 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SET_MERCHANT_DATA_RESPONSE,
             CONFIG_TERMINAL_REQUEST,
             CONFIG_TERMINAL_RESPONSE,
+            CUSTOMER_DATA_REQUEST,
+            CUSTOMER_DATA_RESPONSE,
+            LOYALTY_INQUIRY_REQUEST,
+            LOYALTY_INQUIRY_RESPONSE,
         }
 
         public enum AuthorizationType
@@ -97,6 +101,10 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendSetMerchantDataRequest = 9,
             [Description("Send configuration terminal request")]
             SendConfigTerminalRequest = 10,
+            [Description("Send customer data request")]
+            SendCustomerDataRequest=11,
+            [Description("Send loyalty inquiry request")]
+            SendLoyaltyInquiryRequest = 12,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]

@@ -59,6 +59,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.GetMerchantDataReqReceived += Server_GetMerchantDataReqReceived;
             server.SetMerchantDataReqReceived += Server_SetMerchantDataReqReceived;
             server.ConfigTerminalReqReceived += Server_ConfigTerminalReqReceived;
+            server.CustomerDataResponseReceived += Server_CustomerDataResponseReceived;
 
             try
             {
@@ -157,6 +158,14 @@ namespace SimpleWebSocketServer.SIBS.Console
                             break;
                         case TerminalCommandOptions.SendConfigTerminalRequest:
                             SendConfigTerminalRequest(new ConfigTerminalReq()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendCustomerDataRequest:
+                            SendCustomerDataReq(new CustomerDataReq()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
+                        case TerminalCommandOptions.SendLoyaltyInquiryRequest:
+                            SendLoyaltyInquiryReq(new LoyaltyInquiryReq()).Wait();
                             WaitForEvent(statusEventReceived);
                             break;
                         case TerminalCommandOptions.ShowListOfCommands:
@@ -304,6 +313,11 @@ namespace SimpleWebSocketServer.SIBS.Console
         }
 
         private static void Server_ConfigTerminalReqReceived(ConfigTerminalReqResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
+        private static void Server_CustomerDataResponseReceived(CustomerDataResponse reqResponse)
         {
             statusEventReceived.Set();
         }
@@ -538,6 +552,38 @@ namespace SimpleWebSocketServer.SIBS.Console
             try
             {
                 await server.SendMessageToClient(JsonConvert.SerializeObject(configTerminalReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a customer data request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendCustomerDataReq(CustomerDataReq customerDataReq)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(customerDataReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a loyalty inquiry request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendLoyaltyInquiryReq(LoyaltyInquiryReq loyaltyInquiryReq)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(loyaltyInquiryReq));
             }
             catch (Exception ex)
             {
