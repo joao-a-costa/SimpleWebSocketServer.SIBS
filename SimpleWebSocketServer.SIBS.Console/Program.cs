@@ -60,6 +60,7 @@ namespace SimpleWebSocketServer.SIBS.Console
             server.SetMerchantDataReqReceived += Server_SetMerchantDataReqReceived;
             server.ConfigTerminalReqReceived += Server_ConfigTerminalReqReceived;
             server.CustomerDataResponseReceived += Server_CustomerDataResponseReceived;
+            server.PendingReversalsReqReceived += Server_PendingReversalsReqReceived;
 
             try
             {
@@ -168,6 +169,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             SendLoyaltyInquiryReq(new LoyaltyInquiryReq()).Wait();
                             WaitForEvent(statusEventReceived);
                             break;
+                        case TerminalCommandOptions.SendPendingReversalsRequest:
+                            SendPendingReversalsRequest(new PendingReversalsReq()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
                         case TerminalCommandOptions.ShowListOfCommands:
                             ShowListOfCommands();
                             break;
@@ -229,11 +234,6 @@ namespace SimpleWebSocketServer.SIBS.Console
 
         #region "Server Events"
 
-        /// <summary>
-        /// Event handler for the PairingReqReceived event.
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="reqResponse">The PairingReqResponse object.</param>
         private static async void Server_PairingReqReceived(object sender, PairingReqResponse reqResponse)
         {
             try
@@ -265,21 +265,11 @@ namespace SimpleWebSocketServer.SIBS.Console
             statusEventReceived.Set();
         }
 
-        /// <summary>
-        /// Event handler for the ClientConnected event.
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="e">The EventArgs object.</param>
         private static void Server_ClientConnected(object sender, EventArgs e)
         {
             ShowListOfCommands();
         }
 
-        /// <summary>
-        /// Event handler for the TerminalStatusReqResponseReceived event.
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="reqResponse">The TerminalStatusReqResponse object.</param>
         private async static void Server_TerminalStatusReqResponseReceived(object sender, TerminalStatusReqResponse reqResponse)
         {
             if (reqResponse != null && !reqResponse.HasCredentials)
@@ -318,6 +308,11 @@ namespace SimpleWebSocketServer.SIBS.Console
         }
 
         private static void Server_CustomerDataResponseReceived(CustomerDataResponse reqResponse)
+        {
+            statusEventReceived.Set();
+        }
+
+        private static void Server_PendingReversalsReqReceived(PendingReversalsReqResponse reqResponse)
         {
             statusEventReceived.Set();
         }
@@ -584,6 +579,22 @@ namespace SimpleWebSocketServer.SIBS.Console
             try
             {
                 await server.SendMessageToClient(JsonConvert.SerializeObject(loyaltyInquiryReq));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        // <summary>
+        /// Sends a pending reversals request.
+        /// </summary>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendPendingReversalsRequest(PendingReversalsReq req)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(req));
             }
             catch (Exception ex)
             {
