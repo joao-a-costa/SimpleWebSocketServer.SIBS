@@ -56,7 +56,9 @@
     <Compile Include="Models\CardData.cs" />
     <Compile Include="Models\ConfigTerminalReqResponse.cs" />
     <Compile Include="Models\CustomerData.cs" />
+    <Compile Include="Models\DeletePendingReversalsReqResponse.cs" />
     <Compile Include="Models\PendingReversal.cs" />
+    <Compile Include="Models\DeletePendingReversalsReq.cs" />
     <Compile Include="Models\PendingReversalsReqResponse.cs" />
     <Compile Include="Models\PendingReversalsReq.cs" />
     <Compile Include="Models\LoyaltyInquiryResponse.cs" />
