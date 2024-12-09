@@ -1,4 +1,4 @@
-# SimpleWebSocketServer
+# SimpleWebSocketServer.SIBS
 
 A simple WebSocket server implementation in C# using `SimpleWebSocketServer.SIBS.Models` and `Newtonsoft.Json` for JSON parsing.
 
