@@ -47,6 +47,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void InstallCertificateMessageEventHandler(object sender, string e);
         public delegate void CustomerDataResponseEventHandler(CustomerDataResponse reqResponse);
         public delegate void LoyaltyInquiryResponseEventHandler(LoyaltyInquiryResponse reqResponse);
+        public delegate void PendingReversalsReqResponseEventHandler(PendingReversalsReqResponse reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
         public event ClientDisconnectedEventHandler ClientDisconnected;
@@ -68,6 +69,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event CustomerDataResponseEventHandler CustomerDataResponseReceived;
         public event LoyaltyInquiryResponseEventHandler LoyaltyInquiryResponseReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
+        public event PendingReversalsReqResponseEventHandler PendingReversalsReqReceived;
 
         #endregion
 
@@ -307,6 +309,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnLoyaltyInquiryResponseReceived(JsonConvert
                                 .DeserializeObject<LoyaltyInquiryResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.PENDING_REVERSALS_RESPONSE:
+                            OnPendingReversalsReqResponseReceived(JsonConvert
+                                .DeserializeObject<PendingReversalsReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -501,6 +507,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnLoyaltyInquiryResponseReceived(LoyaltyInquiryResponse reqResponse)
         {
             LoyaltyInquiryResponseReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnPendingReversalsReqResponseReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnPendingReversalsReqResponseReceived(PendingReversalsReqResponse reqResponse)
+        {
+            PendingReversalsReqReceived?.Invoke(reqResponse);
         }
 
         #endregion
