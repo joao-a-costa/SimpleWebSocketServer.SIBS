@@ -173,6 +173,10 @@ namespace SimpleWebSocketServer.SIBS.Console
                             SendPendingReversalsRequest(new PendingReversalsReq()).Wait();
                             WaitForEvent(statusEventReceived);
                             break;
+                        case TerminalCommandOptions.SendDeletePendingReversalsReqRequest:
+                            SendDeletePendingReversalsReqRequest(new DeletePendingReversalsReq()).Wait();
+                            WaitForEvent(statusEventReceived);
+                            break;
                         case TerminalCommandOptions.ShowListOfCommands:
                             ShowListOfCommands();
                             break;
@@ -591,6 +595,23 @@ namespace SimpleWebSocketServer.SIBS.Console
         /// </summary>
         /// <returns>The task object representing the asynchronous operation.</returns>
         private static async Task SendPendingReversalsRequest(PendingReversalsReq req)
+        {
+            try
+            {
+                await server.SendMessageToClient(JsonConvert.SerializeObject(req));
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"{_MessageErrorProcessingRequest}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a delete pending reversals request.
+        /// </summary>
+        /// <param name="req">The request object</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        private static async Task SendDeletePendingReversalsReqRequest(DeletePendingReversalsReq req)
         {
             try
             {

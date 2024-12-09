@@ -39,7 +39,9 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             LOYALTY_INQUIRY_REQUEST,
             LOYALTY_INQUIRY_RESPONSE,
             PENDING_REVERSALS_REQUEST,
-            PENDING_REVERSALS_RESPONSE
+            PENDING_REVERSALS_RESPONSE,
+            DELETE_PENDING_REVERSALS_REQUEST,
+            DELETE_PENDING_REVERSALS_RESPONSE,
         }
 
         public enum AuthorizationType
@@ -109,6 +111,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Enums
             SendLoyaltyInquiryRequest = 12,
             [Description("Send pending reversals request")]
             SendPendingReversalsRequest = 13,
+            [Description("Send delete pending reversals request")]
+            SendDeletePendingReversalsReqRequest = 14,
             [Description("Show list of commands")]
             ShowListOfCommands = 9998,
             [Description("Stop the server")]

@@ -48,6 +48,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public delegate void CustomerDataResponseEventHandler(CustomerDataResponse reqResponse);
         public delegate void LoyaltyInquiryResponseEventHandler(LoyaltyInquiryResponse reqResponse);
         public delegate void PendingReversalsReqResponseEventHandler(PendingReversalsReqResponse reqResponse);
+        public delegate void DeletePendingReversalsReqResponseEventHandler(DeletePendingReversalsReqResponse reqResponse);
 
         public event ClientConnectedEventHandler ClientConnected;
         public event ClientDisconnectedEventHandler ClientDisconnected;
@@ -70,6 +71,7 @@ namespace SimpleWebSocketServer.SIBS.Lib
         public event LoyaltyInquiryResponseEventHandler LoyaltyInquiryResponseReceived;
         public static event InstallCertificateMessageEventHandler InstallCertificateMessage;
         public event PendingReversalsReqResponseEventHandler PendingReversalsReqReceived;
+        public event DeletePendingReversalsReqResponseEventHandler DeletePendingReversalsReqReceived;
 
         #endregion
 
@@ -313,6 +315,10 @@ namespace SimpleWebSocketServer.SIBS.Lib
                             OnPendingReversalsReqResponseReceived(JsonConvert
                                 .DeserializeObject<PendingReversalsReqResponse>(e));
                             break;
+                        case Enums.Enums.RequestType.DELETE_PENDING_REVERSALS_RESPONSE:
+                            OnDeletePendingReversalsReqResponseReceived(JsonConvert
+                                .DeserializeObject<DeletePendingReversalsReqResponse>(e));
+                            break;
                         default:
                             Console.WriteLine(_MessageReceivedUnknownMessage);
                             break;
@@ -516,6 +522,15 @@ namespace SimpleWebSocketServer.SIBS.Lib
         private void OnPendingReversalsReqResponseReceived(PendingReversalsReqResponse reqResponse)
         {
             PendingReversalsReqReceived?.Invoke(reqResponse);
+        }
+
+        /// <summary>
+        /// OnDeletePendingReversalsReqResponseReceived event handler
+        /// </summary>
+        /// <param name="reqResponse">The response</param>
+        private void OnDeletePendingReversalsReqResponseReceived(DeletePendingReversalsReqResponse reqResponse)
+        {
+            DeletePendingReversalsReqReceived?.Invoke(reqResponse);
         }
 
         #endregion
