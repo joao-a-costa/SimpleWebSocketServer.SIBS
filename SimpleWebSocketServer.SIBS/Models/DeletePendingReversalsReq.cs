@@ -13,5 +13,8 @@ namespace SimpleWebSocketServer.SIBS.Lib.Models
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public RequestType Type { get; set; } = RequestType.DELETE_PENDING_REVERSALS_REQUEST;
+
+        [JsonProperty("reversalId")]
+        public string ReversalId { get; set; }
     }
 }
